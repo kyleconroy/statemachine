@@ -12,6 +12,11 @@ def before_transition(start, end):
         return func
     return inner_func
 
+def state(*args):
+    def inner_func(func):
+        return func
+    return inner_func
+
 def after_transition(start, end):
     def inner_func(func):
         return func
@@ -84,16 +89,17 @@ class Vehicle(FSM):
         else:
             yield "stalled", state.same
 
-    @property
+    @state("parked")
     def speed(self):
-        if self.state in ["parked"]:
-            return 0
-        elif self.state in ["idling", "first gear"]:
-            return 10
+        return 0
 
-    @property 
+    @state("idling", "first gear")
+    def speed(self):
+        return 10
+
+    @state("parked", "stalled", "idling")
     def is_moving(self):
-        return self.state not in ["parked", "stalled", "idling"]
+        return False
 
     #@machine("alarm")
     #class Alarm(FSM):
