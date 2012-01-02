@@ -1,71 +1,47 @@
-from nose.tools import assert_equals, assert_false, assert_true
+from nose.tools import assert_equals, assert_false, assert_true, raises
 from statemachine import Vehicle, TransitionError
 
-# Refactor these tests
-vehicle = Vehicle()
 
-assert_equals(vehicle.state, "parked")
+def test_initial_state():
+    vehicle = Vehicle()
+    assert_equals(vehicle.state, "parked")
+    assert_equals(vehicle.speed(), 0)
+    assert_false(vehicle.is_moving())
 
-assert_true(vehicle.is_parked)
+def test_state_checkers():
+    vehicle = Vehicle()
+    assert_true(vehicle.is_parked)
 
-print vehicle.ignite.transitions
+def test_get_state_transitions():
+    vehicle = Vehicle()
+    print vehicle.ignite.transitions
 
-print vehicle.state.events()
-print vehicle.state.transitions()
+def test_current_state():
+    vehicle = Vehicle()
+    print vehicle.state.events()
+    print vehicle.state.transitions()
 
-assert_equals(vehicle.speed, 0)
-assert_false(vehicle.is_moving)
+def test_ignite():
+    vehicle = Vehicle()
+    vehicle.ignite()
 
-vehicle.ignite()
+    assert_false(vehicle.is_parked)
+    assert_true(vehicle.is_idling)
+    assert_equals(vehicle.speed(), 10)
 
-assert_false(vehicle.is_parked)
-assert_true(vehicle.is_idling)
-assert_equals(vehicle.speed, 10)
+def test_shift_up():
+    vehicle = Vehicle()
+    vehicle.state = "ignite"
+    vehicle.shift_up()
 
-vehicle.shift_up()
+    assert_equals(vehicle.speed(), 10)
+    assert_true(vehicle.is_moving, 10)
 
-assert_equals(vehicle.speed, 10)
-assert_true(vehicle.is_moving, 10)
+def test_ignite_manurl():
+    vehicle = Vehicle()
+    assert_true(vehicle.fire_state_event("ignite"))
 
-# A generic event helper is available to fire without going 
-# through the event's instance method
-assert_true(vehicle.fire_state_event("shift_up"))
-
-# Call state-driven behavior that's undefined for the state raises a NoMethodError
-# TODO vehicle.speed
-
-# The bang (!) operator can raise exceptions if the event fails
-try:
+@raises(TransitionError)
+def test_transition_error():
+    vehicle = Vehicle()
     vehicle.park()
-except TransitionError:
-    pass
-
-# Namespaced machines have uniquely-generated methods
-# Not sure how inner things should work
-# vehicle.alarm_state             # => 1
-# vehicle.alarm_state_name        # => :active
-# 
-# vehicle.can_disable_alarm?      # => true
-# vehicle.disable_alarm           # => true
-# vehicle.alarm_state             # => 0
-# vehicle.alarm_state_name        # => :off
-# vehicle.can_enable_alarm?       # => true
-# 
-# vehicle.alarm_off?              # => true
-# vehicle.alarm_active?           # => false
-# 
-
-# Events can be fired in parallel
-vehicle.fire_events("shift_down", "enable_alarm") # => true
-
-assert_equals(vehicle.state, "first_gear")
-#assert_equals(vehicle.alarm.state, "active") 
-
-# Available transition paths can be analyzed for an object
-#print vehicle.state_paths()
-
-# vehicle.state_paths().to_states
-# vehicle.state_paths.events
-
-# Find all paths that start and end on certain states
-#print vehicle.state_paths(start="parked", end="first_gear")

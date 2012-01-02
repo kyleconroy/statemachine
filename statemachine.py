@@ -1,8 +1,8 @@
 class FSM(object):
 
-    @property
-    def state(self):
-        return "parked"
+    def __init__(self, initial=None):
+        self.state = "parked"
+
 
 class TransitionError(Exception):
     pass
@@ -36,7 +36,7 @@ class Vehicle(FSM):
         self.seatbelt_on = False
         self.time_used = 0
         self.auth_shop_busy = False
-        self.initial = "parked"
+        self.state = "parked"
 
     @before_transition("on", "crash")
     def tow(self):
