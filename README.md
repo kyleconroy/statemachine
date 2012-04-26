@@ -1,5 +1,7 @@
 # `statemachine`
 
+[![Build Status](https://secure.travis-ci.org/tnhu/jsface.png?branch=master)](http://travis-ci.org/tnhu/jsface)
+
 If you aren't programming with state machines, [you should be](http://www.shopify.com/technology/3383012-why-developers-should-be-force-fed-state-machines).
 
 `statemachine` offers a simple and easy-to-use finite-state machine that can adapted into almost any code base.
