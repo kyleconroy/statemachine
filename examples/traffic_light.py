@@ -7,6 +7,7 @@ class TrafficLight(fsm.Machine):
 
     @fsm.after_transition('red', 'green')
     def chime(self):
+        print 'GO GO GO'
         self.count += 1
 
     @fsm.after_transition('*', 'red')

@@ -51,6 +51,33 @@ Calling the `cycle` method will transition the machine into the next state.
 'green'
 ```
 
+You can listen for transition events using the `before_installation` and `after_installation`  decorators`.
+
+```python
+import statemachine
+
+class TrafficLight(statemachine.Machine):
+    initial_state = 'red'
+
+    @statemachine.event
+    def cycle(self):
+        yield 'red', 'green'
+        yield 'green', 'yellow'
+        yield 'yellow', 'red'
+
+    @statemachine.after_transition('red', 'green')
+    def announce(self):
+        print "GO GO GO"
+```
+
+Initiate the transition by calling `cycle`
+
+```python
+>>> stoplight = TrafficLight()
+>>> stoplight.cycle()
+'GO GO GO'
+```
+
 ## Installation
 
     $ pip install statemachine
