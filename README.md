@@ -78,6 +78,29 @@ Initiate the transition by calling `cycle`
 'GO GO GO'
 ```
 
+If you only care about where you're coming from (or where you're going), use the `transition_from` and `transition_to` decorator
+
+```python
+import statemachine
+
+class TrafficLight(statemachine.Machine):
+    initial_state = 'red'
+
+    @statemachine.event
+    def cycle(self):
+        yield 'red', 'green'
+        yield 'green', 'yellow'
+        yield 'yellow', 'red'
+
+    @transition_to('yellow')
+    def safety(self):
+        print "SLOW DOWN"
+
+    @transition_from('red')
+    def announce(self):
+        print "GO GO GO"
+```
+
 ## Installation
 
     $ pip install statemachine
