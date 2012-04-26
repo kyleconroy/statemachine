@@ -1,6 +1,10 @@
-# Head of State
+# State Machine
 
 Simple finite state machines for Python
+
+## Installation
+
+    $ pip install statemachine
 
 ## Lead by Example
 
@@ -19,3 +23,7 @@ class TrafficLight(Machine):
 light = TrafficLight()
 light.cycle()
 ```
+
+## TODO
+
+A bunch more stuff
