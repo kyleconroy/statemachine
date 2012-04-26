@@ -51,7 +51,7 @@ Calling the `cycle` method will transition the machine into the next state.
 'green'
 ```
 
-You can listen for transition events using the `before_installation` and `after_installation`  decorators`.
+You can listen for transition events using the `before_transition` and `after_transition`  decorators`.
 
 ```python
 import statemachine
