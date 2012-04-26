@@ -16,7 +16,7 @@ class MetaMachine(type):
 
         before, after = [], []
 
-        for name, func in d.iteritems():
+        for name, func in d.items():
             try:
                 after += [(start, end, func) for start, end in func.after]
             except AttributeError:
