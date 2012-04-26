@@ -1,22 +1,21 @@
-from statemachine import event, Machine
-from statemachine import before_transition, after_transition, around_transition
+import statemachine as fsm
 
 
-class TrafficLight(Machine):
-    initial_state = 'stop'
+class TrafficLight(fsm.Machine):
+    initial_state = 'red'
     count = 0
 
-    @after_transition('stop', 'proceed')
+    @fsm.after_transition('red', 'green')
     def chime(self):
         self.count += 1
 
-    @after_transition('*', 'stop')
+    @fsm.after_transition('*', 'red')
     def apply_brakes(self):
         self.stopped = True
 
-    @event
+    @fsm.event
     def cycle(self):
-        yield 'stop', 'proceed'
-        yield 'proceed', 'caution'
-        yield 'caution', 'stop'
+        yield 'red', 'green'
+        yield 'green', 'yellow'
+        yield 'yellow', 'red'
 

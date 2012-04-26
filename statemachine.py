@@ -16,20 +16,21 @@ class MetaMachine(type):
 
         before, after = [], []
 
-        for name, method in d.iteritems():
+        for name, func in d.iteritems():
             try:
-                after += [(from_, to, method) for from_, to in method.after]
+                after += [(start, end, func) for start, end in func.after]
             except AttributeError:
                 pass
 
             try:
-                before += [(from_, to, method) for from_, to in method.before]
+                before += [(start, end, func) for start, end in func.before]
             except AttributeError:
                 pass
 
         d['_after_transitions'] = after
         d['_before_transitions'] = before
         d['_state'] = state
+
         return type.__new__(cls, name, bases, d)
 
 
@@ -41,24 +42,22 @@ class Machine(object):
         return self._state
 
 
-def after_transition(from_state, to_state):
+def create_transition(attr, from_state, to_state):
     def wrapper(f):
         try:
-            f.after.append((from_state, to_state))
+            getattr(f, attr).append((from_state, to_state))
         except AttributeError:
-            f.after = [(from_state, to_state)]
+            setattr(f, attr, [(from_state, to_state)])
         return f
     return wrapper
+
+
+def after_transition(from_state, to_state):
+    return create_transition('after', from_state, to_state)
 
 
 def before_transition(from_state, to_state):
-    def wrapper(f):
-        try:
-            f.before.append((from_state, to_state))
-        except AttributeError:
-            f.before = [(from_state, to_state)]
-        return f
-    return wrapper
+    return create_transition('before', from_state, to_state)
 
 
 def around_transition(f):

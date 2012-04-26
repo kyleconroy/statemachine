@@ -23,7 +23,7 @@ This machine won't do much, but we can get the current state
 'red'
 ```
 
-We can add state transitions using the `event` decorator. These functions must return an iterable of transitions. A transition is just a two-tuple. The first element is an iterable of states (or the wilcard '*') and the second element is the target state.
+We can add state transitions using the `event` decorator. These functions return an iterable of transitions. A transition is just a two-tuple. The first element is an iterable of states, the wilcard '*', or a single state. The second element is the target state.
 
 ```python
 import statemachine
