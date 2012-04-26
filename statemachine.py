@@ -65,6 +65,21 @@ def around_transition(f):
 def is_transition(start, end, current, future):
     return (start in current or start == '*') and (end in future or end == '*')
 
+def transition_from(from_state, timing='before'):
+    """Trigger the decorated function whenever transitioning
+    `from` the specified state (to anything else). By default,
+    fires before the state transition has taken place, so the
+    :attr:`~Machine.state` will be `from_state`.
+    """
+    return create_transition(timing, from_state, '*')
+
+def transition_to(to_state, timing='after'):
+    """Trigger the decorated function whenever transitioning
+    `to` the specified state (from anything else). By default,
+    fires after the state transition has taken place, so the
+    :attr:`~Machine.state` will be `to_state`.
+    """
+    return create_transition(timing, '*', to_state)
 
 def event(f):
     @wraps(f)
