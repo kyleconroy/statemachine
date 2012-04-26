@@ -33,13 +33,11 @@ class MetaMachine(type):
 
         return type.__new__(cls, name, bases, d)
 
-
-class Machine(object):
-    __metaclass__ = MetaMachine
-
-    @property
-    def state(self):
-        return self._state
+# Python 2/3 Metaclass
+# http://mikewatkins.ca/2008/11/29/python-2-and-3-metaclasses/
+Machine = MetaMachine('Machine', (object, ), {
+    'state': property(lambda x: x._state),
+    })
 
 
 def create_transition(attr, from_state, to_state):
